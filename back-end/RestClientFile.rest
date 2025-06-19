@@ -11,7 +11,7 @@ GET http://localhost:8000/users/0001/cart
 Content-Type: application/json
 
 ### Add to shopping cart
-POST http://localhost:8000/cart
+POST http://localhost:8000/users/0001/cart
 Content-Type: application/json
 
 {
@@ -19,5 +19,5 @@ Content-Type: application/json
 }
 
 ### Delete product from shopping cart
-DELETE http://localhost:8000/cart/789
+DELETE http://localhost:8000/users/0001/cart/789
 Content-Type: application/json

@@ -29,27 +29,35 @@ async function start() {
   });
 
   app.get('/users/:userId/cart', async (req, res) => {
-    const user = await db.collection('users').findOne({ id: req.params.userId })
+    const userId = req.params.userId
+    const user = await db.collection('users').findOne({ id: userId })
     res.json(await mapProducts(user.cartItems))
   });
 
-  app.post('/cart', (req, res) => {
+  app.post('/users/:userId/cart', async (req, res) => {
+    const userId = req.params.userId
     const productId = req.body.id
-    cartItems.push(productId)
-    res.json(mapProducts(cartItems))
+
+    await db.collection('users').updateOne({ id: userId }, { $push: { cartItems: productId } })
+
+    const user = await db.collection('users').findOne({ id: userId })
+    res.json(await mapProducts(user.cartItems))
   })
 
-  app.delete('/cart/:productId', (req, res) => {
+  app.delete('/users/:userId/cart/:productId', async (req, res) => {
+    const userId = req.params.userId
     const productId = req.params.productId
-    cartItems = cartItems.filter(el => el !== productId)
-    res.json(mapProducts(cartItems))
+
+    await db.collection('users').updateOne({ id: userId }, { $pull: { cartItems: productId } })
+
+    const user = await db.collection('users').findOne({ id: userId })
+    res.json(await mapProducts(user.cartItems))
   })
 
   const port = 8000;
   app.listen(port, () => {
     console.log(`Server is listening on ${port}`)
   });
-
 }
 
 start()
