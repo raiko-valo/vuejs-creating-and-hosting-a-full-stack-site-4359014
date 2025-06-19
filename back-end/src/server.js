@@ -7,6 +7,10 @@ app.use(express.json())
 let cartItems = cartItemsRaw
 let products = productsRaw
 
+const mapProducts = (ids) => {
+  return products.filter(el => ids.includes(el.id))
+}
+
 app.get('/hello', (req, res) => {
   res.send('Hello world!')
 });
@@ -22,20 +26,19 @@ app.get('/products/:productId', (req, res) => {
 });
 
 app.get('/cart', (req, res) => {
-  res.json(cartItemsRaw)
+  res.json(mapProducts(cartItems))
 });
 
 app.post('/cart', (req, res) => {
   const productId = req.body.id
-  const product = productsRaw.find(el => el.id = productId)
-  cartItems.push(product)
-  res.json(cartItems)
+  cartItems.push(productId)
+  res.json(mapProducts(cartItems))
 })
 
 app.delete('/cart/:productId', (req, res) => {
   const productId = req.params.productId
-  cartItems = cartItems.filter(el => el.id !== productId)
-  res.json(cartItems)
+  cartItems = cartItems.filter(el => el !== productId)
+  res.json(mapProducts(cartItems))
 })
 
 const port = 8000;
