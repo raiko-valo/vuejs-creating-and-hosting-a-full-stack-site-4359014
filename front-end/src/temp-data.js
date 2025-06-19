@@ -1,4 +1,3 @@
-import basilBottle from './assets/basil-bottle.webp';
 import lemonBottle from './assets/lemon-bottle.webp';
 import garlicBottle from './assets/garlic-bottle.webp';
 import rosemaryBottle from './assets/rosemary-bottle.webp';
@@ -28,12 +27,7 @@ export const cartItems = [
     }
 ]
 
-export const products = [{
-        id: '123',
-        name: 'Basil',
-        price: '$26.00',
-        image: basilBottle,
-    },
+export const products = [
     {
         id: '234',
         name: 'Lemon',
