@@ -17,3 +17,7 @@ Content-Type: application/json
 {
   "id": "789"
 }
+
+### Delete product from shopping cart
+DELETE http://localhost:8000/cart/789
+Content-Type: application/json

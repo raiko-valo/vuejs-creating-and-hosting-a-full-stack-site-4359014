@@ -26,11 +26,15 @@ app.get('/cart', (req, res) => {
 });
 
 app.post('/cart', (req, res) => {
-  console.log("siin", req)
   const productId = req.body.id
-  console.log("id", productId)
   const product = productsRaw.find(el => el.id = productId)
   cartItems.push(product)
+  res.json(cartItems)
+})
+
+app.delete('/cart/:productId', (req, res) => {
+  const productId = req.params.productId
+  cartItems = cartItems.filter(el => el.id !== productId)
   res.json(cartItems)
 })
 
