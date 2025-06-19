@@ -13,8 +13,6 @@
 <script setup>
 import { defineProps } from 'vue';
 
-
-
 const props = defineProps({
   products: { type: Array, default: () => [] },
 })
