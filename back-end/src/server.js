@@ -1,32 +1,42 @@
 import express from 'express';
-import { products as productsRaw, cartItems as cartItemsRaw } from './temp-data';
+import dotenv from 'dotenv';
+
+const { MongoClient } = require('mongodb');
+
+dotenv.config()
+const uri = `mongodb+srv://valoraiko:${process.env.DB_PASSWORD}@cluster0.ke0dzuy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
+
+const client = new MongoClient(uri)
 
 const app = express();
 app.use(express.json())
 
-let cartItems = cartItemsRaw
-let products = productsRaw
-
-const mapProducts = (ids) => {
-  return products.filter(el => ids.includes(el.id))
+const mapProducts = async (ids) => {
+  await client.connect()
+  const db = client.db('fsv-db')
+  console.log(ids)
+  return Promise.all(ids.map(id => db.collection('products').findOne({ id })))
 }
 
-app.get('/hello', (req, res) => {
-  res.send('Hello world!')
+app.get('/products', async (req, res) => {
+  await client.connect()
+  const db = client.db('fsv-db')
+  const prodcuts = await db.collection('products').find({}).toArray()
+  res.json(prodcuts)
 });
 
-app.get('/products', (req, res) => {
-  res.json(products)
-});
-
-app.get('/products/:productId', (req, res) => {
-  const productId = req.params.productId
-  const product = productsRaw.find(el => el.id = productId)
+app.get('/products/:productId', async (req, res) => {
+  await client.connect()
+  const db = client.db('fsv-db')
+  const product = await db.collection('products').findOne({ id: req.params.productId })
   res.json(product)
 });
 
-app.get('/cart', (req, res) => {
-  res.json(mapProducts(cartItems))
+app.get('/users/:userId/cart', async (req, res) => {
+  await client.connect()
+  const db = client.db('fsv-db')
+  const user = await db.collection('users').findOne({ id: req.params.userId })
+  res.json(await mapProducts(user.cartItems))
 });
 
 app.post('/cart', (req, res) => {
