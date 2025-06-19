@@ -1,10 +1,12 @@
 <template>
-  <h1>Two Trees Olive Oil</h1>
+  <NavBar />
   <div class="page-wrap">
     <router-view></router-view>
   </div>
 </template>
 
 <script setup>
+import NavBar from '@/components/NavBar.vue';
+
 
 </script>
