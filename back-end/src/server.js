@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { MongoClient } from 'mongodb'
+import path from 'path'
 
 dotenv.config()
 const uri = `mongodb+srv://valoraiko:${process.env.DB_PASSWORD}@cluster0.ke0dzuy.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`
@@ -10,6 +11,7 @@ async function start() {
 
   const app = express();
   app.use(express.json())
+  app.use('/images', express.static(path.join(__dirname, '../assets')))
 
   await client.connect()
   const db = client.db('fsv-db')

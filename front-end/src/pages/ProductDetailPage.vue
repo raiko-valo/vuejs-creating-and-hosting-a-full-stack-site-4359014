@@ -4,7 +4,7 @@
   </div>
   <div v-else>
     <div class="img-wrap">
-      <img :src="product.imageName" />
+      <img :src="product.imageUrl" />
     </div>
     <div class="product-details">
       <h1>{{ product.name }}</h1>
@@ -18,14 +18,14 @@
 <script setup>
 import axios from 'axios'
 import { useRoute } from 'vue-router'
-import { onMounted, ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import NotFoundPage from './NotFoundPage.vue';
 
 const route = useRoute()
-const product = ref([])
+const product = ref(null)
 
-onMounted(async () => {
+onBeforeMount(async () => {
   const response = await axios.get(`/api/products/${route.params.productId}`)
-  product.value = response?.data ?? []
+  product.value = response?.data ?? null
 })
 </script>

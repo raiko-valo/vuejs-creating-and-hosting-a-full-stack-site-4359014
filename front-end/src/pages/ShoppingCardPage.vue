@@ -12,12 +12,12 @@
 <script setup>
 import axios from 'axios'
 import ShoppingCartList from '@/components/ShoppingCartList.vue'
-import { onMounted, ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 
 const products = ref([])
 
-onMounted(async () => {
-  const response = await axios.get('/api/cart')
+onBeforeMount(async () => {
+  const response = await axios.get('/api/users/0001/cart')
   products.value = response?.data ?? []
 })
 </script>
