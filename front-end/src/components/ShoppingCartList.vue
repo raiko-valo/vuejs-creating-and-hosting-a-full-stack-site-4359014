@@ -5,7 +5,7 @@
       <h3>{{ product.name }}</h3>
       <p>{{ product.price }}</p>
     </div>
-    <button class="remove-button">Remove from cart</button>
+    <button @click="() => props.onRemove(product.id)" class="remove-button">Remove from cart</button>
   </div>
 </template>
 <script setup>
@@ -13,5 +13,6 @@ import { defineProps } from 'vue';
 
 const props = defineProps({
   products: { type: Array, default: () => [] },
+  onRemove: { type: Function, default: () => {} },
 })
 </script>
