@@ -4,12 +4,12 @@
   </div>
   <div v-else>
     <div class="img-wrap">
-      <img :src="product.imageUrl" />
+      <img :src="`/${product.imageUrl}`"/>
     </div>
     <div class="product-details">
       <h1>{{ product.name }}</h1>
       <h3 class="price">{{ product.price }}</h3>
-      <button class="add-to-cart">Add to cart</button>
+      <button @click="addToCart" class="add-to-cart">Add to cart</button>
     </div>
   </div>
 
@@ -23,6 +23,11 @@ import NotFoundPage from './NotFoundPage.vue';
 
 const route = useRoute()
 const product = ref(null)
+
+const addToCart = async () => {
+  await axios.post('/api/users/0001/cart', {id: route.params.productId})
+  alert('Item is added to cart!')
+}
 
 onBeforeMount(async () => {
   const response = await axios.get(`/api/products/${route.params.productId}`)
