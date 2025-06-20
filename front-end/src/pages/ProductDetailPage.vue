@@ -16,10 +16,16 @@
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router';
-import { products } from '../temp-data'
+import axios from 'axios'
+import { useRoute } from 'vue-router'
+import { onMounted, ref } from 'vue'
 import NotFoundPage from './NotFoundPage.vue';
 
 const route = useRoute()
-const product = products.find(item => item.id === route.params.productId) ?? null
+const product = ref([])
+
+onMounted(async () => {
+  const response = await axios.get(`/api/products/${route.params.productId}`)
+  product.value = response?.data ?? []
+})
 </script>

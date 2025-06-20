@@ -18,23 +18,23 @@ async function start() {
     return Promise.all(ids.map(id => db.collection('products').findOne({ id })))
   }
 
-  app.get('/products', async (req, res) => {
+  app.get('/api/products', async (req, res) => {
     const prodcuts = await db.collection('products').find({}).toArray()
     res.json(prodcuts)
   });
 
-  app.get('/products/:productId', async (req, res) => {
+  app.get('/api/products/:productId', async (req, res) => {
     const product = await db.collection('products').findOne({ id: req.params.productId })
     res.json(product)
   });
 
-  app.get('/users/:userId/cart', async (req, res) => {
+  app.get('/api/users/:userId/cart', async (req, res) => {
     const userId = req.params.userId
     const user = await db.collection('users').findOne({ id: userId })
     res.json(await mapProducts(user.cartItems))
   });
 
-  app.post('/users/:userId/cart', async (req, res) => {
+  app.post('/api/users/:userId/cart', async (req, res) => {
     const userId = req.params.userId
     const productId = req.body.id
 
@@ -44,7 +44,7 @@ async function start() {
     res.json(await mapProducts(user.cartItems))
   })
 
-  app.delete('/users/:userId/cart/:productId', async (req, res) => {
+  app.delete('/api/users/:userId/cart/:productId', async (req, res) => {
     const userId = req.params.userId
     const productId = req.params.productId
 
