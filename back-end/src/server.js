@@ -40,7 +40,7 @@ async function start() {
     const userId = req.params.userId
     const productId = req.body.id
 
-    await db.collection('users').updateOne({ id: userId }, { $push: { cartItems: productId } })
+    await db.collection('users').updateOne({ id: userId }, { $addToSet: { cartItems: productId } })
 
     const user = await db.collection('users').findOne({ id: userId })
     res.json(await mapProducts(user.cartItems))

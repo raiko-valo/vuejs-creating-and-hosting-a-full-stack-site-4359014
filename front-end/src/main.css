@@ -21,6 +21,12 @@ button {
   padding: 16px;
 }
 
+button:disabled {
+  background-color: #ccc;
+  color: #777;
+  cursor: not-allowed;
+}
+
 h1 {
   border-bottom: 1px solid black;
   margin: 0;
