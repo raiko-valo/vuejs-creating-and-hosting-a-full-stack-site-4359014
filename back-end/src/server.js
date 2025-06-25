@@ -17,6 +17,9 @@ async function start() {
   const db = client.db('fsv-db')
 
   const mapProducts = async (ids) => {
+    if (!ids) {
+      return []
+    }
     return Promise.all(ids.map(id => db.collection('products').findOne({ id })))
   }
 
@@ -33,18 +36,20 @@ async function start() {
   app.get('/api/users/:userId/cart', async (req, res) => {
     const userId = req.params.userId
     const user = await db.collection('users').findOne({ id: userId })
-    res.json(await mapProducts(user.cartItems))
+    res.json(await mapProducts(user?.cartItems))
   });
 
+
   app.post('/api/users/:userId/cart', async (req, res) => {
-    const userId = req.params.userId
-    const productId = req.body.id
+    const userId = req.params.userId;
+    const productId = req.body.id;
 
-    await db.collection('users').updateOne({ id: userId }, { $addToSet: { cartItems: productId } })
+    await db.collection('users').updateOne({ id: userId }, { $addToSet: { cartItems: productId } }, { upsert: true })
 
-    const user = await db.collection('users').findOne({ id: userId })
-    res.json(await mapProducts(user.cartItems))
-  })
+    const user = await db.collection('users').findOne({ id: req.params.userId });
+
+    res.json(await mapProducts(user?.cartItems));
+  });
 
   app.delete('/api/users/:userId/cart/:productId', async (req, res) => {
     const userId = req.params.userId
@@ -53,7 +58,7 @@ async function start() {
     await db.collection('users').updateOne({ id: userId }, { $pull: { cartItems: productId } })
 
     const user = await db.collection('users').findOne({ id: userId })
-    res.json(await mapProducts(user.cartItems))
+    res.json(await mapProducts(user?.cartItems))
   })
 
   const port = 8000;
